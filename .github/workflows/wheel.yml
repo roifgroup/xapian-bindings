@@ -1,7 +1,7 @@
 name: manylinux
 on: [workflow_dispatch]
 jobs:
-  pep513:
+  wheel:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -11,7 +11,10 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get install libxapian-dev
-          pip install --upgrade pip setuptools wheel build sphinx
+          pip install --upgrade pip setuptools wheel build sphinx twine
       - name: Build wheel
         run: |
           python setup.py bdist_wheel
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
