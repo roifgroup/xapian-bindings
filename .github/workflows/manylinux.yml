@@ -3,31 +3,15 @@ on: [workflow_dispatch]
 jobs:
   pep513:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-abi: [cp39-cp39, cp310-cp310]
-        image:
-          - manylinux2010_x86_64
-          - manylinux_2_24_x86_64
-    container: quay.io/pypa/${{ matrix.image }}
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       - name: Install build dependencies
         run: |
-          /opt/python/${{ matrix.python-abi }}/bin/pip install --upgrade pip setuptools wheel build sphinx
-      - name: Set environment variables
-        shell: bash
+          apt-get install xapian-core
+          pip install --upgrade pip setuptools wheel build sphinx
+      - name: Build wheel
         run: |
-          echo "PKGVER=$(/opt/python/${{ matrix.python-abi }}/bin/python setup.py --version)" >> $GITHUB_ENV
-      - name: Build linux_x86_64 wheel
-        env:
-          PYXMLSEC_STATIC_DEPS: true
-        run: |
-          /opt/python/${{ matrix.python-abi }}/bin/python setup.py bdist_wheel
-      - name: Label manylinux wheel
-        run: |
-          ls -la dist/
-          auditwheel show dist/xapianpy-${{ env.PKGVER }}-${{ matrix.python-abi }}-linux_x86_64.whl
-          auditwheel repair dist/xapianpy-${{ env.PKGVER }}-${{ matrix.python-abi }}-linux_x86_64.whl
-          ls -la wheelhouse/
-          auditwheel show wheelhouse/xapianpy-${{ env.PKGVER }}-${{ matrix.python-abi }}-*${{ matrix.image }}*.whl
+          python setup.py bdist_wheel
