@@ -9,16 +9,13 @@ RUN apt-get update \
     gcc
 
 ENV XAPIAN_VERSION=1.4.22
-ENV PATH="/venv/bin:$PATH"
 
 WORKDIR /tmp/
 
 RUN pip3 install sphinx \
-    ## Compile & Install Xapian
     && mkdir -p /tmp/src\
-    # build xapian-core
     && curl -SL https://oligarchy.co.uk/xapian/${XAPIAN_VERSION}/xapian-core-${XAPIAN_VERSION}.tar.xz \
     | tar -xJC /tmp/src \
-    && /tmp/src/xapian-core-${XAPIAN_VERSION}/configure --prefix=/venv \
+    && /tmp/src/xapian-core-${XAPIAN_VERSION}/configure \
     && make \
     && make install
