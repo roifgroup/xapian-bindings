@@ -10,7 +10,7 @@ jobs:
           python-version: '3.10'
       - name: Install build dependencies
         run: |
-          apt-get install xapian-core
+          sudo apt-get install xapian-core
           pip install --upgrade pip setuptools wheel build sphinx
       - name: Build wheel
         run: |
