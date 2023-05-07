@@ -1,5 +1,6 @@
 build
 dist
+*.so
 .idea/
 .venv*
 .eggs
