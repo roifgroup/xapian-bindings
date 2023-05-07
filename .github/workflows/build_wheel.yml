@@ -41,3 +41,4 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
           packages-dir: wheelhouse/
           verify-metadata: false
+          verbose: true
