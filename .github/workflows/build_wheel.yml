@@ -1,25 +1,45 @@
 name: build wheel
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    xapian_version:
+      type: choice
+      description: Xapian version
+      default: 1.4.22
+      options:
+        - 1.4.22
+        - 1.4.21
+        - 1.4.20
+        - 1.4.19
+        - 1.4.18
+    python_version:
+      type: choice
+      description: Python version
+      default: 3.10
+      options:
+        - 3.11
+        - 3.10
+        - 3.9
+        - 3.8
+        - 3.7
 jobs:
   wheel:
     runs-on: ubuntu-latest
+    container: papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}}
     steps:
       - uses: actions/checkout@v1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          file: docker/Dockerfile
-          tags: cust-many-linux:latest
-      - uses: shrink/actions-docker-extract@v2
-        id: extract
-        with:
-          image: cust-many-linux:latest
-          path: /app/wheelhouse/
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages-dir: ${{ steps.extract.outputs.destination }}
+      - name: Build wheel
+        run: |
+          docker run -v `pwd`/scripts:/scripts/ papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
+#      - uses: shrink/actions-docker-extract@v2
+#        id: extract
+#        with:
+#          image: cust-many-linux:latest
+#          path: /app/wheelhouse/
+#      - uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          password: ${{ secrets.PYPI_API_TOKEN }}
+#          packages-dir: ${{ steps.extract.outputs.destination }}
