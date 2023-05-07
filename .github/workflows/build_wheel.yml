@@ -34,8 +34,8 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build wheel
         run: |
-          docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/dist/wheelhouse papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
-          ls -la /app/dist/wheelhouse
+          docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/wheelhouse papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
+          ls -la `pwd`/wheelhouse
 #      - uses: shrink/actions-docker-extract@v2
 #        id: extract
 #        with:
