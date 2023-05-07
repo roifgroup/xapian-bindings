@@ -1,5 +1,4 @@
 ARG XAPIAN_VERSION
-ARG PYVER
 FROM papermerge/many-linux-with-xapian:${XAPIAN_VERSION}
 
 ENV PREFIX=/venv
