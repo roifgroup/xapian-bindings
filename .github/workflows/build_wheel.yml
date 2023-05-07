@@ -17,7 +17,7 @@ jobs:
       - uses: shrink/actions-docker-extract@v2
         id: extract
         with:
-          image: cust-many-liunx:latest
+          image: cust-many-linux:latest
           path: /app/wheelhouse/
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
