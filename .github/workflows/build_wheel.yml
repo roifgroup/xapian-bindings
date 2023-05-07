@@ -22,7 +22,7 @@ on:
         - 3.8
         - 3.7
 jobs:
-  wheel:
+  build_wheel:
     runs-on: ubuntu-latest
     container: papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}}
     steps:
