@@ -34,6 +34,12 @@ COPY xapian/ /app/xapian/
 
 WORKDIR /app
 
+# copy *.so AND __init__.py; at this point __init__.py  will contain SWIG interface
+# __init__.py was generated in when building xapian bindings
 RUN cp /opt/python/cp310-cp310/lib/python3.10/site-packages/xapian/*.so /app/xapian/
+RUN cp /opt/python/cp310-cp310/lib/python3.10/site-packages/xapian/*.py /app/xapian/
+
+RUN TODAY=$(date +"%y%m%d%H%m") && echo "__version__ = '${XAPIAN_VERSION}.post${TODAY}'" > /app/xapian/bindings.py
+
 RUN python setup.py bdist_wheel
 RUN auditwheel repair dist/*.whl
