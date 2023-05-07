@@ -1,23 +1,15 @@
-FROM quay.io/pypa/manylinux2014_x86_64
+ARG XAPIAN_VERSION
+FROM papermerge/many-linux-with-xapian:${XAPIAN_VERSION}
 
 ENV PREFIX=/venv
 ENV XAPIAN_CONFIG=/venv/bin/xapian-config
-ENV XAPIAN_VERSION=1.4.22
+ARG XAPIAN_VERSION
 ENV PATH="/opt/python/cp310-cp310/bin:$PATH"
 ENV PYBIN=/opt/python/cp310-cp310/bin
 
 RUN ${PYBIN}/pip install sphinx
 
-RUN yum install -y curl
-
 RUN mkdir -p tmp/src
-
-# compile xapian core
-RUN curl -SL https://oligarchy.co.uk/xapian/${XAPIAN_VERSION}/xapian-core-${XAPIAN_VERSION}.tar.xz \
-    | tar -xJC /tmp/src \
-    && /tmp/src/xapian-core-${XAPIAN_VERSION}/configure --prefix=${PREFIX}  \
-    && make \
-    && make install
 
 # compile xapian python bindings
 RUN curl -SL http://oligarchy.co.uk/xapian/${XAPIAN_VERSION}/xapian-bindings-${XAPIAN_VERSION}.tar.xz \
