@@ -36,12 +36,7 @@ jobs:
         run: |
           docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/wheelhouse papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
           ls -la `pwd`/wheelhouse
-#      - uses: shrink/actions-docker-extract@v2
-#        id: extract
-#        with:
-#          image: cust-many-linux:latest
-#          path: /app/wheelhouse/
-#      - uses: pypa/gh-action-pypi-publish@release/v1
-#        with:
-#          password: ${{ secrets.PYPI_API_TOKEN }}
-#          packages-dir: ${{ steps.extract.outputs.destination }}
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages-dir: `pwd`/wheelhouse
