@@ -1,0 +1,18 @@
+FROM quay.io/pypa/manylinux2014_x86_64
+
+ENV PREFIX=/venv
+ENV XAPIAN_CONFIG=/venv/bin/xapian-config
+
+RUN yum install -y curl
+
+RUN mkdir -p tmp/src
+
+ARG XAPIAN_VERSION
+RUN echo "XAPIAN_VERSION=${XAPIAN_VERSION}"
+
+# compile xapian core
+RUN curl -SL https://oligarchy.co.uk/xapian/${XAPIAN_VERSION}/xapian-core-${XAPIAN_VERSION}.tar.xz \
+    | tar -xJC /tmp/src \
+    && /tmp/src/xapian-core-${XAPIAN_VERSION}/configure --prefix=${PREFIX}  \
+    && make \
+    && make install
