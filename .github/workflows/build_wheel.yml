@@ -5,23 +5,24 @@ on:
       xapian_version:
         type: choice
         description: Xapian version
-        default: 1.4.22
+        default: "1.4.22"
         options:
-          - 1.4.22
-          - 1.4.21
-          - 1.4.20
-          - 1.4.19
-          - 1.4.18
+          - "1.4.22"
+          - "1.4.21"
+          - "1.4.20"
+          - "1.4.19"
+          - "1.4.18"
       python_version:
         type: choice
         description: Python version
-        default: 3.10
+        default: "3.10"
         options:
-          - 3.11
-          - 3.10
-          - 3.9
-          - 3.8
-          - 3.7
+          - "3.11"
+          - "3.10"
+          - "3.9"
+          - "3.8"
+          - "3.7"
+
 jobs:
   build_wheel:
     runs-on: ubuntu-latest
