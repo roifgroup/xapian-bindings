@@ -40,9 +40,11 @@ jobs:
         run: |
           docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/wheelhouse roifgroup/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
           ls -la `pwd`/wheelhouse
+      - name: Zip artifact for deployment
+        run: zip release.zip ./wheelhouse/*.whl -r
       - name: Archive wheel
         uses: actions/upload-artifact@v3
         with:
           name: xapianpy
-          path: app/wheelhouse/*
+          path: release.zip
 
