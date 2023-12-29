@@ -32,6 +32,6 @@ jobs:
         with:
           push: true
           file: docker/Dockerfile.xapian
-          tags: papermerge/many-linux-with-xapian:${{ inputs.xapian_version }}
+          tags: roifgroup/many-linux-with-xapian:${{ inputs.xapian_version }}
           build-args: |
             XAPIAN_VERSION=${{inputs.xapian_version}}
