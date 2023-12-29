@@ -40,12 +40,13 @@ jobs:
         run: |
           docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/wheelhouse roifgroup/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
           ls -la `pwd`/wheelhouse
-      - name: Upload wheel to GitHub Release                                                                         
-        uses: actions/upload-release-asset@v1                                                                        
-        env:                                                                                                         
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                                                                  
-        with:                                                                                                        
-          upload_url: ${{ github.event.release.upload_url }}                                                         
-          asset_path: ./dist/*.whl                                                                                   
-          asset_name: xapianpy.whl  # Change this to your desired wheel file name                                   
+      - name: Upload wheel to GitHub Release                                                                           
+        if: github.event_name == 'release' && github.event.action == 'created'                                         
+        uses: actions/upload-release-asset@v1                                                                          
+        env:                                                                                                           
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                                                                    
+        with:                                                                                                          
+          upload_url: ${{ github.event.release.upload_url }}                                                           
+          asset_path: /app/wheelhouse/*.whl                                                                                     
+          asset_name: xapianpy.whl # change this to match your actual wheel filename pattern                          
           asset_content_type: application/octet-stream
