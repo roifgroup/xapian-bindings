@@ -32,13 +32,15 @@ jobs:
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        with: 
+          platforms: linux/arm64
       - name: Build wheel
         run: |
           docker run -e XAPIAN_VERSION=${{inputs.xapian_version}} -e PYVER=${{inputs.python_version}} -v `pwd`/scripts:/scripts/ -v `pwd`/wheelhouse:/app/wheelhouse papermerge/many-linux-with-xapian-bindings:${{inputs.xapian_version}} /scripts/build_wheel.sh
           ls -la `pwd`/wheelhouse
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Archive wheel
+        uses: actions/upload-artifact@v3
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages-dir: wheelhouse/
-          verify-metadata: false
-          verbose: true
+          name: xapianpy
+          path: /wheelhouse/*
+
